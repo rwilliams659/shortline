@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import BarChart from '../../../components/charts/BarChart';
 import Tile from '../../../components/Tile';
-import { xhrRequest } from '../../../utilities/helpers';
+import { xhrRequest, sortSpeciesByHeight } from '../../../utilities/helpers';
 
 export default function SpeciesTile() {
   return <SpeciesTile_DisplayLayer {...useDataLayer()} />;
@@ -27,13 +27,14 @@ SpeciesTile_DisplayLayer.propTypes = {
 
 // a great spot to fetch third party API data, the useDataLayer hook is... see README.md
 function useDataLayer() {
-  const [ speciesData, setSpeciesData ] = useState(null);
-  const [isLoading, setIsLoading ] = useState(true)
+  const [speciesData, setSpeciesData] = useState(null);
+  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
     xhrRequest.get('https://swapi.dev/api/species/')
       .then(data => {
-        setSpeciesData(data.body.results)
+        const sortedSpecies = sortSpeciesByHeight(data.body.results)
+        setSpeciesData(sortedSpecies)
         setIsLoading(false)
       })
   }, [])

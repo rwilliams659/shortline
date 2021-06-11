@@ -80,7 +80,16 @@ function joinClassName(...args) {
     .trim();
 }
 
+// Filter out species without average height and sort from tallest to shortest
+function sortSpeciesByHeight(species) {
+  const filteredSpecies = species.filter(singleSpecies => singleSpecies.average_height !== "n/a")
+  const sortedSpecies = filteredSpecies.sort((a, b) => {
+    return parseInt(b.average_height) - parseInt(a.average_height)
+  })
+  return sortedSpecies
+}
+
 // ex: request.get('https://somerandosite.com/api/endpoint').then((res) => console.log(res));
 const xhrRequest = superagentPromise(superagent, Promise);
 
-export { fillInColorScale, findMaxIndices, genKey, getObjVal, joinClassName, xhrRequest };
+export { fillInColorScale, findMaxIndices, genKey, getObjVal, joinClassName, xhrRequest, sortSpeciesByHeight };
