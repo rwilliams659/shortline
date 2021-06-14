@@ -94,9 +94,8 @@ function sortDescendingOrder(results, property) {
 }
 
 // Find maximum value for bar chart
-function getMaxValue(data) {
-  const values = data.map((singleData) =>
-    parseInt(singleData.value, 10));
+function getMaxValue(dataSet) {
+  const values = dataSet.map((data) => data.value);
   return Math.max(...values);
 }
 
