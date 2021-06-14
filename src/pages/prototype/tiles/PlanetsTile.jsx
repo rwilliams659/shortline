@@ -43,20 +43,19 @@ function useDataLayer() {
   const [planetsData, setPlanetsData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  // If time, refactor so that array for Promise.all is dynamic (Math.ceil(data.body.count / 10))
   useEffect(() => {
     const allPlanetResults = [];
-    Promise.all([
-      xhrRequest.get('http://swapi.dev/api/planets/?page=1'),
-      xhrRequest.get('http://swapi.dev/api/planets/?page=2'),
-      xhrRequest.get('http://swapi.dev/api/planets/?page=3'),
-      xhrRequest.get('http://swapi.dev/api/planets/?page=4'),
-      xhrRequest.get('http://swapi.dev/api/planets/?page=5'),
-      xhrRequest.get('http://swapi.dev/api/planets/?page=6')
-    ]).then((responses) => {
-      responses.forEach((response) => allPlanetResults.push(...response.body.results));
-      setPlanetsData(allPlanetResults);
-      setIsLoading(false);
+    xhrRequest.get('http://swapi.dev/api/planets/').then((data) => {
+      const numPages = Math.ceil(data.body.count / data.body.results.length);
+      const promiseApiCalls = [];
+      for (let i = 1; i <= numPages; i += 1) {
+        promiseApiCalls.push(xhrRequest.get(`http://swapi.dev/api/planets/?page=${i}`));
+      }
+      Promise.all(promiseApiCalls).then((responses) => {
+        responses.forEach((response) => allPlanetResults.push(...response.body.results));
+        setPlanetsData(allPlanetResults);
+        setIsLoading(false);
+      });
     });
   }, []);
   return {
