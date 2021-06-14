@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { VictoryChart, VictoryAxis, VictoryBar, VictoryTheme } from 'victory';
 import { pink, teal } from '../../styles/global/mixins.scss';
+import { getMaxValue } from '../../utilities/helpers';
 
 export default function BarChart({
   barWidth = 20,
@@ -17,6 +18,7 @@ export default function BarChart({
       width={chartWidth}
       height={chartHeight}
       padding={{ top: 8, left: 50, bottom: 50, right: 50 }}
+      domain={{ x: [0, data.length], y: [0, getMaxValue(data)] }}
       domainPadding={{ x: barWidth / 2 }}
       theme={VictoryTheme.material}
     >

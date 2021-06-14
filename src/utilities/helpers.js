@@ -80,7 +80,35 @@ function joinClassName(...args) {
     .trim();
 }
 
+// Filter out results without property provided and sort from largest to smallest
+function sortDescendingOrder(results, property) {
+  const filteredResults = results.filter((result) => !Number.isNaN(parseInt(result[property], 10)));
+  const sortedResults = filteredResults.sort((a, b) => {
+    return parseInt(b[property], 10) - parseInt(a[property], 10);
+  });
+  const mappedResults = sortedResults.map((result) => ({
+    name: result.name,
+    value: parseInt(result[property], 10)
+  }));
+  return mappedResults;
+}
+
+// Find maximum value for bar chart
+function getMaxValue(dataSet) {
+  const values = dataSet.map((data) => data.value);
+  return Math.max(...values);
+}
+
 // ex: request.get('https://somerandosite.com/api/endpoint').then((res) => console.log(res));
 const xhrRequest = superagentPromise(superagent, Promise);
 
-export { fillInColorScale, findMaxIndices, genKey, getObjVal, joinClassName, xhrRequest };
+export {
+  fillInColorScale,
+  findMaxIndices,
+  genKey,
+  getObjVal,
+  joinClassName,
+  xhrRequest,
+  sortDescendingOrder,
+  getMaxValue
+};
