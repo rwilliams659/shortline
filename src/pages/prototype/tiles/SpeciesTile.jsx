@@ -22,22 +22,22 @@ SpeciesTile_DisplayLayer.propTypes = {
       name: PropTypes.string,
       value: PropTypes.number
     })
-  )
+  ),
+  isLoading: PropTypes.bool
 };
 
 // a great spot to fetch third party API data, the useDataLayer hook is... see README.md
 function useDataLayer() {
   const [speciesData, setSpeciesData] = useState(null);
-  const [isLoading, setIsLoading] = useState(true)
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    xhrRequest.get('https://swapi.dev/api/species/')
-      .then(data => {
-        const sortedSpecies = sortSpeciesByHeight(data.body.results)
-        setSpeciesData(sortedSpecies)
-        setIsLoading(false)
-      })
-  }, [])
+    xhrRequest.get('https://swapi.dev/api/species/').then((data) => {
+      const sortedSpecies = sortSpeciesByHeight(data.body.results);
+      setSpeciesData(sortedSpecies);
+      setIsLoading(false);
+    });
+  }, []);
   return {
     speciesData,
     isLoading

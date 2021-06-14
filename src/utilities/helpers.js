@@ -82,14 +82,30 @@ function joinClassName(...args) {
 
 // Filter out species without average height and sort from tallest to shortest
 function sortSpeciesByHeight(species) {
-  const filteredSpecies = species.filter(singleSpecies => singleSpecies.average_height !== "n/a")
+  const filteredSpecies = species.filter((singleSpecies) => singleSpecies.average_height !== 'n/a');
   const sortedSpecies = filteredSpecies.sort((a, b) => {
-    return parseInt(b.average_height) - parseInt(a.average_height)
-  })
-  return sortedSpecies
+    return parseInt(b.average_height, 10) - parseInt(a.average_height, 10);
+  });
+  return sortedSpecies;
+}
+
+// Map species data to x & y coordinates
+function getSpeciesBarCoordinates(speciesData) {
+  return speciesData.map((singleSpecies) => {
+    const xCoordinate = singleSpecies.name;
+    const yCoordinate = parseInt(singleSpecies.average_height, 10);
+    return { name: xCoordinate, value: yCoordinate };
+  });
+}
+
+// Find maximum value for bar chart
+function getMaxValue(speciesData) {
+  const heightValues = speciesData.map((singleSpecies) => 
+    parseInt(singleSpecies.average_height, 10));
+  return Math.max(...heightValues);
 }
 
 // ex: request.get('https://somerandosite.com/api/endpoint').then((res) => console.log(res));
 const xhrRequest = superagentPromise(superagent, Promise);
 
-export { fillInColorScale, findMaxIndices, genKey, getObjVal, joinClassName, xhrRequest, sortSpeciesByHeight };
+export { fillInColorScale, findMaxIndices, genKey, getObjVal, joinClassName, xhrRequest, sortSpeciesByHeight, getSpeciesBarCoordinates, getMaxValue };
