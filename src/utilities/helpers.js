@@ -86,26 +86,30 @@ function sortDescendingOrder(results, property) {
   const sortedResults = filteredResults.sort((a, b) => {
     return parseInt(b[property], 10) - parseInt(a[property], 10);
   });
-  return sortedResults;
-}
-
-// Map data to x & y coordinates
-function getSpeciesBarCoordinates(speciesData) {
-  return speciesData.map((singleSpecies) => {
-    const xCoordinate = singleSpecies.name;
-    const yCoordinate = parseInt(singleSpecies.average_height, 10);
-    return { name: xCoordinate, value: yCoordinate };
-  });
+  const mappedResults = sortedResults.map((result) => ({
+    name: result.name,
+    value: parseInt(result[property], 10)
+  }));
+  return mappedResults;
 }
 
 // Find maximum value for bar chart
-function getMaxValue(speciesData) {
-  const heightValues = speciesData.map((singleSpecies) =>
-    parseInt(singleSpecies.average_height, 10));
-  return Math.max(...heightValues);
+function getMaxValue(data) {
+  const values = data.map((singleData) =>
+    parseInt(singleData.value, 10));
+  return Math.max(...values);
 }
 
 // ex: request.get('https://somerandosite.com/api/endpoint').then((res) => console.log(res));
 const xhrRequest = superagentPromise(superagent, Promise);
 
-export { fillInColorScale, findMaxIndices, genKey, getObjVal, joinClassName, xhrRequest, sortDescendingOrder, getSpeciesBarCoordinates, getMaxValue };
+export {
+  fillInColorScale,
+  findMaxIndices,
+  genKey,
+  getObjVal,
+  joinClassName,
+  xhrRequest,
+  sortDescendingOrder,
+  getMaxValue
+};

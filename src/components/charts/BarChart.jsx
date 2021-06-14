@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { VictoryChart, VictoryAxis, VictoryBar, VictoryTheme } from 'victory';
 import { pink, teal } from '../../styles/global/mixins.scss';
-import { getSpeciesBarCoordinates, getMaxValue } from '../../utilities/helpers';
+import { getMaxValue } from '../../utilities/helpers';
 
 export default function BarChart({
   barWidth = 20,
@@ -39,7 +39,7 @@ export default function BarChart({
         x={xKey}
         y={yKey}
         animate={{ duration: 500 }}
-        data={getSpeciesBarCoordinates(data)}
+        data={data}
         style={{ data: { fill: pink, stroke: teal, strokeWidth, width: barWidth } }}
       />
     </VictoryChart>
