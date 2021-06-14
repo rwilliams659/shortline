@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import TetrisChart from '../../../components/charts/TetrisChart';
 import Tile from '../../../components/Tile';
@@ -8,7 +8,7 @@ export default function PlanetsTile() {
   return <PlanetsTile_DisplayLayer {...useDataLayer()} />;
 }
 
-export function PlanetsTile_DisplayLayer({ planetsData }) {
+export function PlanetsTile_DisplayLayer({ planetsData, isLoading }) {
   function renderPlanetChartTooltip({ name, value }) {
     return (
       <div className="flex-container justify-between align-baseline secret-platform-prototype-chart-tooltip">
@@ -22,7 +22,7 @@ export function PlanetsTile_DisplayLayer({ planetsData }) {
   }
 
   return (
-    <Tile title="Star Wars Planet Diameters (km)" isLoading>
+    <Tile title="Star Wars Planet Diameters (km)" isLoading={isLoading}>
       <TetrisChart data={planetsData} onSectionHover={renderPlanetChartTooltip} />
     </Tile>
   );
@@ -34,10 +34,33 @@ PlanetsTile_DisplayLayer.propTypes = {
       name: PropTypes.string,
       value: PropTypes.number
     })
-  )
+  ),
+  isLoading: PropTypes.bool
 };
 
 // a great spot to fetch third party API data, the useDataLayer hook is... see README.md
 function useDataLayer() {
-  return {};
+  const [planetsData, setPlanetsData] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  // If time, refactor so that array for Promise.all is dynamic (Math.ceil(data.body.count / 10))
+  useEffect(() => {
+    const allPlanetResults = [];
+    Promise.all([
+      xhrRequest.get('http://swapi.dev/api/planets/?page=1'),
+      xhrRequest.get('http://swapi.dev/api/planets/?page=2'),
+      xhrRequest.get('http://swapi.dev/api/planets/?page=3'),
+      xhrRequest.get('http://swapi.dev/api/planets/?page=4'),
+      xhrRequest.get('http://swapi.dev/api/planets/?page=5'),
+      xhrRequest.get('http://swapi.dev/api/planets/?page=6')
+    ]).then((responses) => {
+      responses.forEach((response) => allPlanetResults.push(...response.body.results));
+      setPlanetsData(allPlanetResults);
+      setIsLoading(false);
+    });
+  }, []);
+  return {
+    planetsData,
+    isLoading
+  };
 }

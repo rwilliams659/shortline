@@ -100,7 +100,7 @@ function getSpeciesBarCoordinates(speciesData) {
 
 // Find maximum value for bar chart
 function getMaxValue(speciesData) {
-  const heightValues = speciesData.map((singleSpecies) => 
+  const heightValues = speciesData.map((singleSpecies) =>
     parseInt(singleSpecies.average_height, 10));
   return Math.max(...heightValues);
 }
