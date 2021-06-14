@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import TetrisChart from '../../../components/charts/TetrisChart';
 import Tile from '../../../components/Tile';
-import { xhrRequest } from '../../../utilities/helpers';
+import { sortDescendingOrder, xhrRequest } from '../../../utilities/helpers';
 
 export default function PlanetsTile() {
   return <PlanetsTile_DisplayLayer {...useDataLayer()} />;
@@ -53,7 +53,8 @@ function useDataLayer() {
       }
       Promise.all(promiseApiCalls).then((responses) => {
         responses.forEach((response) => allPlanetResults.push(...response.body.results));
-        setPlanetsData(allPlanetResults);
+        const sortedPlanets = sortDescendingOrder(allPlanetResults, 'diameter');
+        setPlanetsData(sortedPlanets);
         setIsLoading(false);
       });
     });
